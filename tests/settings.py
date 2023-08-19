@@ -3,7 +3,7 @@ import sys
 
 cur_file = Path(__file__).resolve()
 ROOT_DIR = cur_file.parent
-sys.path.insert(0, str(ROOT_DIR.parent))
+sys.path.insert(0, ROOT_DIR.parent)
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -23,7 +23,7 @@ USE_L10N = False
 USE_TZ = False
 MEDIA_ROOT = ''
 MEDIA_URL = str(ROOT_DIR / 'media') + '/'
-STATIC_ROOT = str(ROOT_DIR / 'static')
+STATIC_ROOT = ROOT_DIR / 'static'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = ()
 STATICFILES_FINDERS = (
@@ -51,7 +51,22 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'tests.urls'
 WSGI_APPLICATION = 'tests.wsgi.application'
 
-TEMPLATE_DIRS = ()
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [ROOT_DIR / "templates"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.media",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+            ],
+        },
+    },
+]
 
 INSTALLED_APPS = (
   'django.contrib.auth',
@@ -61,9 +76,8 @@ INSTALLED_APPS = (
   'django.contrib.messages',
   'django.contrib.staticfiles',
   'django_json_response',
+  'tests',
 )
-
-AUTH_PROFILE_MODULE = 'testapp.Author'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
